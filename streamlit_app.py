@@ -170,7 +170,7 @@ elif page == "🔐 Admin Dashboard":
 
             add_product(name, price, category, img_path)
             st.success("Product saved permanently")
-            st.experimental_rerun()
+            st.rerun()  # FIXED
 
         st.markdown("### 🗑 Existing Products")
         for p in get_products():
@@ -179,7 +179,7 @@ elif page == "🔐 Admin Dashboard":
             col1.write(f"{name} - ₹{price} ({category})")
             if col2.button("Delete", key=f"del_{pid}"):
                 delete_product(pid)
-                st.experimental_rerun()
+                st.rerun()  # FIXED
     else:
         st.warning("Admin only")
 
