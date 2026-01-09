@@ -196,9 +196,7 @@ elif page == "🔐 Admin Dashboard":
             if col2.button("Delete", key=f"del_{pid}"):
                 delete_product(pid)
                 st.rerun()  # FIXED
-    else:
-        st.warning("Admin only")
-    st.markdown("### 💳 Upload / Update UPI QR Code")
+        st.markdown("### 💳 Upload / Update UPI QR Code")
     upi_file = st.file_uploader("Upload UPI QR (PNG/JPG)", type=["png", "jpg", "jpeg"], key="upi_qr")
 
     if st.button("Save UPI QR"):
@@ -209,6 +207,9 @@ elif page == "🔐 Admin Dashboard":
             st.experimental_rerun()
         else:
             st.warning("Please select a file to upload")
+    else:
+        st.warning("Admin only")
+
 
 # ---------------- FOOTER ----------------
 st.markdown("---")
