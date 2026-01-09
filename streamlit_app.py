@@ -4,7 +4,7 @@ from PIL import Image
 import os
 import uuid
 
-st.set_page_config(page_title="Digital Store", layout="wide")
+st.set_page_config(page_title="OptimaX mart", layout="wide")
 
 # ---------------- DATABASE ----------------
 DB_FILE = "store.db"
