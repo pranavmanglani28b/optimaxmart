@@ -7,8 +7,8 @@ import uuid
 st.set_page_config(page_title="Digital Store", layout="wide")
 
 # ---------------- DATABASE ----------------
-DB_FILE = os.path.join(os.path.dirname(__file__), "store.db")  # UPDATED
-IMG_DIR = os.path.join(os.path.dirname(__file__), "images")    # UPDATED
+DB_FILE = os.path.join(os.path.dirname(__file__), "store.db")
+IMG_DIR = os.path.join(os.path.dirname(__file__), "images")
 os.makedirs(IMG_DIR, exist_ok=True)
 
 conn = sqlite3.connect(DB_FILE, check_same_thread=False)
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS products (
 )
 """)
 conn.commit()
-
 
 # ---------------- HELPERS ----------------
 def get_products(category=None):
@@ -42,7 +41,6 @@ def add_product(name, price, category, image_path):
     )
     conn.commit()
 
-
 def delete_product(pid):
     c.execute("SELECT image FROM products WHERE id=?", (pid,))
     img = c.fetchone()
@@ -55,13 +53,11 @@ def delete_product(pid):
     conn.commit()
 
 def get_upi_qr_path():
-    # Look for a file named 'upi_qr.png' in the images folder
     upi_path = os.path.join(IMG_DIR, "upi_qr.png")
     if os.path.exists(upi_path):
         return upi_path
     else:
-        return None  # no QR uploaded yet
-
+        return None
 
 # ---------------- STATE ----------------
 if "cart" not in st.session_state:
@@ -147,11 +143,10 @@ elif page == "🛒 Cart / Checkout":
         with col1:
             st.subheader("UPI Payment")
             upi_qr = get_upi_qr_path()
-    if upi_qr:
-        st.image(upi_qr, width=250)
-    else:
-        st.image("https://via.placeholder.com/250?text=UPI+QR", width=250)
-
+            if upi_qr:
+                st.image(upi_qr, width=250)
+            else:
+                st.image("https://via.placeholder.com/250?text=UPI+QR", width=250)
 
         with col2:
             st.subheader("Crypto Payment")
@@ -165,7 +160,7 @@ elif page == "🛒 Cart / Checkout":
 elif page == "🔐 Admin Dashboard":
     st.title("🔐 Admin Dashboard")
 
-    ADMIN_PASSWORD = "admin123"  # CHANGE THIS
+    ADMIN_PASSWORD = "admin123"
     pwd = st.text_input("Admin Password", type="password")
 
     if pwd == ADMIN_PASSWORD:
@@ -186,7 +181,7 @@ elif page == "🔐 Admin Dashboard":
 
             add_product(name, price, category, img_path)
             st.success("Product saved permanently")
-            st.rerun()  # FIXED
+            st.rerun()
 
         st.markdown("### 🗑 Existing Products")
         for p in get_products():
@@ -195,21 +190,22 @@ elif page == "🔐 Admin Dashboard":
             col1.write(f"{name} - ₹{price} ({category})")
             if col2.button("Delete", key=f"del_{pid}"):
                 delete_product(pid)
-                st.rerun()  # FIXED
-        st.markdown("### 💳 Upload / Update UPI QR Code")
-    upi_file = st.file_uploader("Upload UPI QR (PNG/JPG)", type=["png", "jpg", "jpeg"], key="upi_qr")
+                st.rerun()
 
-    if st.button("Save UPI QR"):
-        if upi_file:
-            upi_path = os.path.join(IMG_DIR, "upi_qr.png")  # always overwrite the same file
-            Image.open(upi_file).save(upi_path)
-            st.success("UPI QR updated successfully!")
-            st.experimental_rerun()
-        else:
-            st.warning("Please select a file to upload")
+        st.markdown("### 💳 Upload / Update UPI QR Code")
+        upi_file = st.file_uploader("Upload UPI QR (PNG/JPG)", type=["png", "jpg", "jpeg"], key="upi_qr")
+
+        if st.button("Save UPI QR"):
+            if upi_file:
+                upi_path = os.path.join(IMG_DIR, "upi_qr.png")
+                Image.open(upi_file).save(upi_path)
+                st.success("UPI QR updated successfully!")
+                st.experimental_rerun()
+            else:
+                st.warning("Please select a file to upload")
+
     else:
         st.warning("Admin only")
-
 
 # ---------------- FOOTER ----------------
 st.markdown("---")
