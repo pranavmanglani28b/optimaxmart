@@ -4,11 +4,11 @@ from PIL import Image
 import os
 import uuid
 
-st.set_page_config(page_title="OptimaX mart", layout="wide")
+st.set_page_config(page_title="Digital Store", layout="wide")
 
 # ---------------- DATABASE ----------------
-DB_FILE = "store.db"
-IMG_DIR = "images"
+DB_FILE = os.path.join(os.path.dirname(__file__), "store.db")  # UPDATED
+IMG_DIR = os.path.join(os.path.dirname(__file__), "images")    # UPDATED
 os.makedirs(IMG_DIR, exist_ok=True)
 
 conn = sqlite3.connect(DB_FILE, check_same_thread=False)
@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS products (
 )
 """)
 conn.commit()
+
 
 # ---------------- HELPERS ----------------
 def get_products(category=None):
