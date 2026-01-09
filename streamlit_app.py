@@ -198,6 +198,17 @@ elif page == "🔐 Admin Dashboard":
                 st.rerun()  # FIXED
     else:
         st.warning("Admin only")
+st.markdown("### 💳 Upload / Update UPI QR Code")
+upi_file = st.file_uploader("Upload UPI QR (PNG/JPG)", type=["png", "jpg", "jpeg"], key="upi_qr")
+
+if st.button("Save UPI QR"):
+    if upi_file:
+        upi_path = os.path.join(IMG_DIR, "upi_qr.png")  # always overwrite the same file
+        Image.open(upi_file).save(upi_path)
+        st.success("UPI QR updated successfully!")
+        st.experimental_rerun()
+    else:
+        st.warning("Please select a file to upload")
 
 # ---------------- FOOTER ----------------
 st.markdown("---")
