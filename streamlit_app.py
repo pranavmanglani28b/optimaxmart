@@ -42,6 +42,7 @@ def add_product(name, price, category, image_path):
     )
     conn.commit()
 
+
 def delete_product(pid):
     c.execute("SELECT image FROM products WHERE id=?", (pid,))
     img = c.fetchone()
@@ -52,6 +53,15 @@ def delete_product(pid):
             pass
     c.execute("DELETE FROM products WHERE id=?", (pid,))
     conn.commit()
+
+def get_upi_qr_path():
+    # Look for a file named 'upi_qr.png' in the images folder
+    upi_path = os.path.join(IMG_DIR, "upi_qr.png")
+    if os.path.exists(upi_path):
+        return upi_path
+    else:
+        return None  # no QR uploaded yet
+
 
 # ---------------- STATE ----------------
 if "cart" not in st.session_state:
@@ -136,7 +146,12 @@ elif page == "🛒 Cart / Checkout":
 
         with col1:
             st.subheader("UPI Payment")
-            st.image("https://via.placeholder.com/250?text=UPI+QR")
+            upi_qr = get_upi_qr_path()
+    if upi_qr:
+        st.image(upi_qr, width=250)
+    else:
+        st.image("https://via.placeholder.com/250?text=UPI+QR", width=250)
+
 
         with col2:
             st.subheader("Crypto Payment")
